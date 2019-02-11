@@ -1,18 +1,24 @@
-import _ from 'lodash';
-import printMe from './print.js';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './style.scss'
 
-function component() {
-    let element = document.createElement('div');
-    var btn = document.createElement('button');
+class Image extends React.Component {
+	constructor(props) {
+		super()
+		this.state = {
+			title: "Granite Mountains"
+		}
+	}
+	render() {
+		return (
+			<div>
+				<h1>{this.state.title}</h1>
+				<p>{this.props.caption}</p>
+				<div id="image"></div>
+			</div>
+		)
+	}
+}
 
-    element.innerHTML = _.join(['Hola', 'webpack'], ' ');
-    
-    btn.innerHTML = 'Click me and check the console!';
-    btn.onclick = printMe;
-
-    element.appendChild(btn);
-  
-    return element;
-  }
-  
-  document.body.appendChild(component());
+ReactDOM.render(<Image caption="Wilderness area in Lake Tahoe, California" />, 
+				       document.getElementById('react-container'))

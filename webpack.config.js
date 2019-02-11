@@ -1,26 +1,48 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require("path")
 
 module.exports = {
-  mode: 'development',
-  entry: {
-    app: './src/index.js',
-    print: './src/print.js'
+	entry: "./src/index.js",
+	output: {
+		filename: "bundle.js",
+		path: path.join(__dirname, "dist")
   },
-  devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist'
+    contentBase: path.join(__dirname, "dist"),
+    port: 5000
   },
-  plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-      title: 'Output Management'
-    })
-  ],
-  output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
-      publicPath: '/'
-  }
-};
+	module: {
+		rules: [
+			{
+				test: /.js$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: "babel-loader",
+					options: {
+						presets: ["env", "react"]
+					}
+				}
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"}
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"},
+          {loader: "sass-loader"}
+        ]
+      },
+      {
+        test: /\.jpg$/,
+        use: [
+          {loader: "url-loader"}
+        ]
+      }
+		]
+	}
+}
