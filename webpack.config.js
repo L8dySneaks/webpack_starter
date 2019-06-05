@@ -1,39 +1,48 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack');
+const path = require("path")
 
 module.exports = {
-  mode: 'development',
-  entry: {
-    app: './src/index.js'
+	entry: "./src/index.js",
+	output: {
+		filename: "bundle.js",
+		path: path.join(__dirname, "dist")
   },
-  devtool: 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'src'),
-    watchContentBase: true,
-    hot: true
+    contentBase: path.join(__dirname, "dist"),
+    port: 5000
   },
-  module: {
-    rules: [
+	module: {
+		rules: [
+			{
+				test: /.js$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: "babel-loader",
+					options: {
+						presets: ["env", "react"]
+					}
+				}
+      },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"}
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"},
+          {loader: "sass-loader"}
+        ]
+      },
+      {
+        test: /\.jpg$/,
+        use: [
+          {loader: "url-loader"}
+        ]
       }
-    ]
-  },
-  output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
-      publicPath: '/'
-  },
-  plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-      title: 'first Test',
-      filename: 'index.html',
-      template: 'src/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
-};
+		]
+	}
+}
